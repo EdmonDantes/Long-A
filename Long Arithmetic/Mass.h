@@ -1,0 +1,42 @@
+template <typename T> class Mass {
+private:
+	T* value;
+	int l;
+	int rl;
+	Mass<T>(T* value, int l);
+	int rand();
+public:
+	Mass<T>();
+	Mass<T>(int l);
+	Mass<T>(const Mass<T>& a);
+	~Mass();
+	Mass<T>& operator =(const Mass<T>& a);
+	bool operator <(const Mass<T>& a);
+	bool operator < (Mass<T>* a);
+	bool operator > (const Mass<T>& a);
+	bool operator >= (const Mass<T>& a);
+	bool operator <= (const Mass<T>& a);
+	bool operator == (const Mass<T>& a);
+	bool operator == (Mass<T>* a);
+	T& operator [](int index);
+	void add(T data);
+	void addToBack(T data);
+	void addToStart(T data);
+	void addToStart(Mass<T> a);
+	void addToStart(Mass<T>*a);
+	void addToBack(Mass<T> a);
+	void remove(int id);
+	void removefirst(T data);
+	void setIndex(T data, int id);
+	void clear();
+	bool clearmemory();
+	int freememory();
+	int usingmemory();
+	int size() const;
+	T& get(unsigned int id)const;
+	int find(T data);
+	T* subarray(int startindex);
+	T* subarray(int startindex, int endindex);
+	Mass<T>* submass(unsigned int startindex);
+	Mass<T>* submass(unsigned int startindex, unsigned int l);
+};
