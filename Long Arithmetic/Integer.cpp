@@ -1710,9 +1710,7 @@ Integer* Integer::pow(Integer& a) {
 		return ret;
 	}
 	else {
-		Float a_0 = Float(*this);
-		Float b_0 = Float(a);
-		return a_0.pow(b_0);
+		return 0;
 	}
 }
 

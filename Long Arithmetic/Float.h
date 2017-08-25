@@ -19,10 +19,7 @@ public:
 	Float(long double a);
 	Float(char* a, int l);
 	Float(std::string str);
-	Float(const Integer& a);
 	Float(const Float& a);
 
 	inline ~Float();
-	
-	Integer* pow(Float& a);
 };
