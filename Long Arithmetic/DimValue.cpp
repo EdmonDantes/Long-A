@@ -233,7 +233,7 @@ public:
 	}
 
 	void removeBack() {
-		l--;
+			l--;
 	}
 
 	void removeFirst(T data) {
@@ -254,11 +254,60 @@ public:
 	}
 
 	void clear() {
-		if (l > 0) {
-			delete[] value;
-			l = 0;
-			rl = rand() % maxMemory;
-			this->value = new T[rl];
+		l = 0;
+	}
+
+	void set(DimValue<T>& data) {
+		if (data.l > rl) {
+			if (rl > 0) delete[] value;
+			value =new T[data.rl];
+			rl = data.rl;
+			l = data.l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data.value[i];
+			}
+		}
+		else {
+			l = data.l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data.value[i];
+			}
+		}
+	}
+
+	void set(const DimValue<T>& data) {
+		if (data.l > rl) {
+			if (rl > 0) delete[] value;
+			value = new T[data.rl];
+			rl = data.rl;
+			l = data.l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data.value[i];
+			}
+		}
+		else {
+			l = data.l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data.value[i];
+			}
+		}
+	}
+
+	void set(DimValue<T>* data) {
+		if (data->l > rl) {
+			if (rl > 0) delete[] value;
+			value = new T[data->rl];
+			rl = data->rl;
+			l = data->l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data.value[i];
+			}
+		}
+		else {
+			l = data->l;
+			for (unsigned long long i = 0; i < l; i++) {
+				value[i] = data->value[i];
+			}
 		}
 	}
 

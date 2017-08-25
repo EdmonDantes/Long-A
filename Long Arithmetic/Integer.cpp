@@ -1,4 +1,4 @@
-#include "Float.cpp"
+#include "Float.h"
 //Private section
 int Integer::getNumber(char a) {
 	return a - '0';
@@ -9,12 +9,11 @@ char Integer::getChar(int a) {
 
 void Integer::initChar(char a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	char l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	char l_0 = a;
 	if (l_0 < 0) {
 		this->isPositive = false;
 		l_0 = 0 - l_0;
@@ -27,12 +26,11 @@ void Integer::initChar(char a) {
 }
 void Integer::initCHAR(unsigned char a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	unsigned char l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	unsigned char l_0 = a;
 	while (l_0 > 0) {
 		this->value.add(l_0 % 10);
 		l_0 /= 10;
@@ -41,12 +39,11 @@ void Integer::initCHAR(unsigned char a) {
 }
 void Integer::initInt(int a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	int l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	int l_0 = a;
 	if (l_0 < 0) {
 		this->isPositive = false;
 		l_0 = 0 - l_0;
@@ -59,12 +56,11 @@ void Integer::initInt(int a) {
 }
 void Integer::initINT(unsigned int a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	unsigned int l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	unsigned int l_0 = a;
 	while (l_0 > 0) {
 		this->value.add(l_0 % 10);
 		l_0 /= 10;
@@ -73,12 +69,11 @@ void Integer::initINT(unsigned int a) {
 }
 void Integer::initLong(long a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	long l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	long l_0 = a;
 	if (l_0 < 0) {
 		this->isPositive = false;
 		l_0 = 0 - l_0;
@@ -91,12 +86,11 @@ void Integer::initLong(long a) {
 }
 void Integer::initLONG(unsigned long a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	unsigned long l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	unsigned long l_0 = a;
 	while (l_0 > 0) {
 		this->value.add(l_0 % 10);
 		l_0 /= 10;
@@ -105,12 +99,11 @@ void Integer::initLONG(unsigned long a) {
 }
 void Integer::initLongLong(long long a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	long long l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	long long l_0 = a;
 	if (l_0 < 0) {
 		this->isPositive = false;
 		l_0 = 0 - l_0;
@@ -123,12 +116,11 @@ void Integer::initLongLong(long long a) {
 }
 void Integer::initLONGLONG(unsigned long long a) {
 	this->value.clear();
-	if (a == 0) {
-		this->isPositive = true;
-		this->value.add(0);
+	unsigned long long l_0 = a;
+	if (l_0 == 0) {
+		value.add(0);
 		return;
 	}
-	unsigned long long l_0 = a;
 	while (l_0 > 0) {
 		this->value.add(l_0 % 10);
 		l_0 /= 10;
@@ -136,8 +128,7 @@ void Integer::initLONGLONG(unsigned long long a) {
 	this->value.revers();
 }
 void Integer::initFloat(const Float& a) {
-	this->value.~DimValue();
-	this->value = DimValue<unsigned int>(a.value);
+	this->value.set(a.value);
 	this->isPositive = a.isPositive;
 	this->isNAN = a.isNAN;
 }
@@ -146,6 +137,8 @@ void Integer::initFloat(const Float& a) {
 
 Integer* Integer::add(Integer* a, Integer* b) {
 	if (a->isNAN || b->isNAN) return new Integer();
+	if (a->isZero()) return new Integer(b);
+	if (b->isZero()) return new Integer(a);
 	if (a->isPositive && b->isPositive) {
 		if (a->value.size() >= b->value.size()) {
 			unsigned int l_0 = 0;
@@ -196,6 +189,13 @@ Integer* Integer::add(Integer* a, Integer* b) {
 }
 
 Integer* Integer::sub(Integer* a, Integer* b) {
+	if (a->isNAN || b->isNAN) return new Integer();
+	if (a->isZero()) {
+		Integer* ret = new Integer(b);
+		ret->isPositive = !ret->isPositive;
+		return ret;
+	}
+	if (b->isZero()) return new Integer(a);
 	if (a->isPositive && b->isPositive) {
 		if (*a > *b) {
 			DimValue<unsigned int> ret = DimValue<unsigned int>();
@@ -261,6 +261,8 @@ Integer* Integer::sub(Integer* a, Integer* b) {
 };
 
 Integer* Integer::mult(Integer* a, Integer* b) {
+	if (a->isNAN || b->isNAN) return new Integer();
+	if (a->isZero() || b->isZero()) return ZERO;
 	if (a->isPositive && b->isPositive) {
 		Integer** all = new Integer*[b->value.size()];
 		int x = 0;
@@ -319,6 +321,9 @@ Integer* Integer::mult(Integer* a, Integer* b) {
 }
 
 Integer* Integer::divide(Integer* a, Integer* b) {
+	if (a->isNAN || b->isNAN) return new Integer();
+	if (a->isZero()) return ZERO;
+	if (b->isZero()) return new Integer();
 	if (a->isPositive && b->isPositive) {
 		if (*a < *b) return ZERO;
 		if (*a == *b) return new Integer(1);
@@ -328,8 +333,7 @@ Integer* Integer::divide(Integer* a, Integer* b) {
 		while (i < a->value.size()) {
 			if (a->value[i] == 0) {
 				if (x.size() > 0) {
-					x[0] == 0;
-					if (true) {
+					if (x[0] == 0) {
 						ret.add(0);
 						i++;
 					}
@@ -406,7 +410,7 @@ Integer* Integer::divide(Integer* a, Integer* b) {
 						delete r;
 						c_0.~Integer();
 					}
-					local->~DimValue();
+					delete local;
 					i++;
 				}
 			}
@@ -441,6 +445,7 @@ Integer* Integer::divide(Integer* a, Integer* b) {
 }
 
 unsigned int Integer::div(Integer* a, Integer* b) {
+	if (a->isZero()) return 0;
 	unsigned int ret = 0;
 	Integer c = *a;
 	Integer Z = Integer(0);
@@ -456,7 +461,7 @@ unsigned int Integer::div(Integer* a, Integer* b) {
 	return ret;
 }
 Integer* Integer::mod(Integer* a, Integer* b, unsigned int div) {
-	if (*b != Integer("0")) {
+	if (!b->isZero()) {
 		Integer* c = new Integer(div);
 		Integer* d = mult(b,c);
 		Integer* ret = sub(a,d);
@@ -468,7 +473,7 @@ Integer* Integer::mod(Integer* a, Integer* b, unsigned int div) {
 }
 
 Integer* Integer::mod(Integer* a,Integer* b) {
-	if (*b != Integer("0")) {
+	if (!b->isZero()) {
 		Integer* c = divide(a, b);
 		Integer* d = mult(b, c);
 		Integer* ret = sub(a, d);
@@ -480,15 +485,21 @@ Integer* Integer::mod(Integer* a,Integer* b) {
 }
 
 Integer::Integer(const DimValue<unsigned int> &value, bool isPositive) {
-	this->value.~DimValue();
-	this->value = value;
+	if (value.size() == 0) {
+		this->isNAN = true;
+		return;
+	}
+	this->value.set(value);
 	this->value.removeFirst(0);
 	this->isPositive = isPositive;
 }
 
 Integer::Integer(DimValue<unsigned int>* value, bool isPositive) {
-	this->value.~DimValue();
-	this->value = DimValue<unsigned int>(*value);
+	if (value->size() == 0) {
+		this->isNAN = true;
+		return;
+	}
+	this->value.set(*value);
 	this->value.removeFirst(0);
 	this->isPositive = isPositive;
 }
@@ -529,6 +540,7 @@ Integer::Integer(char* a, int l) {
 			isPositive = false;
 			i++;
 		}
+		this->value = DimValue<unsigned int>();
 		for (i; i < l; i++) {
 			this->value.add(static_cast<unsigned int>(getNumber(a[i])));
 		}
@@ -542,22 +554,20 @@ Integer::Integer(std::string a) {
 			isPositive = false;
 			i++;
 		}
-
+		this->value = DimValue<unsigned int>();
 		for (i; i < a.length(); i++) {
 			this->value.add(static_cast<unsigned int>(getNumber(a[i])));
 		}
 	}
 }
 Integer::Integer(const Integer& a) {
-	this->value.clear();
-	this->value.addToBack(a.value);
+	this->value.set(a.value);
 	this->isPositive = a.isPositive;
 	this->isNAN = a.isNAN;
 }
 
 Integer::Integer(const Integer* a) {
-	this->value.clear();
-	this->value.addToBack(a->value);
+	this->value.set(a->value);
 	this->isPositive = a->isPositive;
 	this->isNAN = a->isNAN;
 }
@@ -574,8 +584,7 @@ Integer& Integer::operator = (const Integer& a) {
 		this->isNAN;
 	}
 	else {
-		this->value.~DimValue();
-		this->value = DimValue<unsigned int>(a.value);
+		this->value.set(a.value);
 		this->value.removeFirst(0);
 		this->isPositive = a.isPositive;
 	}
@@ -690,6 +699,15 @@ bool Integer::operator != (const Float& a) {
 bool Integer::operator < (const Integer& a) {
 	if (a.isNAN) return true;
 	if (this->isNAN) return false;
+	if (a.isZero()) {
+		if (isZero()) return false;
+		else if (!isPositive) return true;
+		else return false;
+	}
+	if (isZero()) {
+		if (a.isPositive) return true;
+		else return false;
+	}
 	if (a.isPositive && isPositive) {
 		if (value.size() < a.value.size()) return true;
 		else if (value.size() == a.value.size()) {
@@ -728,6 +746,15 @@ bool Integer::operator < (const Float& a) { return *this < Integer(a); };
 bool Integer::operator > (const Integer& a){
 	if (a.isNAN) return false;
 	if (this->isNAN) return true;
+	if (a.isZero()) {
+		if (isZero()) return false;
+		else if (!isPositive) return false;
+		else return true;
+	}
+	if (isZero()) {
+		if (a.isPositive) return false;
+		else return true;
+	}
 	if (a.isPositive && isPositive) {
 		if (value.size() < a.value.size()) return false;
 		else if (value.size() == a.value.size()) {
@@ -1444,40 +1471,49 @@ Integer& Integer::operator -() {
 }
 
 bool Integer::isChar() {
+	if (isZero()) return true;
 	if (*this <= CHAR_MAX && *this >= CHAR_MIN) return true;
 	else return false;
 }
 
 bool Integer::isUnsignedChar() {
+	if (isZero()) return true;
 	if (*this <= UCHAR_MAX) return true;
 	else return false;
 };
 bool Integer :: isInt() {
+	if (isZero()) return true;
 	if (*this <= INT_MAX && *this >= INT_MIN) return true;
 	else return false;
 };
 bool Integer::isUnsignedInt() {
+	if (isZero()) return true;
 	if (*this <= UINT_MAX) return true;
 	else return false;
 };
 bool Integer::isLong() {
+	if (isZero()) return true;
 	if (*this <= LONG_MAX && *this >= LONG_MIN) return true;
 	else return false;
 };
 bool Integer::isUnsignedLong() {
+	if (isZero()) return true;
 	if (*this <= ULONG_MAX) return true;
 	else return false;
 };
 bool Integer::isLongLong() {
+	if (isZero()) return true;
 	if (*this <= LLONG_MAX && *this >= LLONG_MIN) return true;
 	else return false;
 };
 bool Integer::isUnsignedLongLong() {
+	if (isZero()) return true;
 	if (*this <= ULLONG_MAX) return true;
 	else return false;
 };
 
 Integer::operator char() {
+	if (isZero()) return 0;
 	char ret=0;
 	if (isChar()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1496,6 +1532,7 @@ Integer::operator char() {
 }
 
 Integer::operator const unsigned char() {
+	if (isZero()) return 0;
 	unsigned char ret = 0;
 	if (isUnsignedChar()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1512,6 +1549,7 @@ Integer::operator const unsigned char() {
 	return ret;
 };
 Integer::operator int() {
+	if (isZero()) return 0;
 	int ret = 0;
 	if (isInt()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1529,6 +1567,7 @@ Integer::operator int() {
 	return ret;
 };
 Integer::operator unsigned int() {
+	if (isZero()) return 0;
 	unsigned int ret = 0;
 	if (isUnsignedInt()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1545,6 +1584,7 @@ Integer::operator unsigned int() {
 	return ret;
 };
 Integer::operator long() {
+	if (isZero()) return 0;
 	long ret = 0;
 	if (isLong()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1562,6 +1602,7 @@ Integer::operator long() {
 	return ret;
 };
 Integer::operator unsigned long() {
+	if (isZero()) return 0;
 	unsigned long ret = 0;
 	if (isUnsignedLong()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1578,6 +1619,7 @@ Integer::operator unsigned long() {
 	return ret;
 };
 Integer::operator long long() {
+	if (isZero()) return 0;
 	long ret = 0;
 	if (isLongLong()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1595,6 +1637,7 @@ Integer::operator long long() {
 	return ret;
 };
 Integer::operator unsigned long long() {
+	if (isZero()) return 0;
 	unsigned long long ret = 0;
 	if (isUnsignedLongLong()) {
 		for (unsigned long long i = 0; i < this->value.size(); i++) {
@@ -1611,11 +1654,16 @@ Integer::operator unsigned long long() {
 	return ret;
 };
 
-bool Integer::isZERO() {
+bool Integer::isZero() {
 	if (value.size() == 1) {
-		if (value[0] == 0) {
-			return true;
-		}
+		if (value[0] == 0) return true;
+	}
+	return false;
+}
+
+bool Integer::isZero() const{
+	if (value.size() == 1) {
+		if (value[0] == 0) return true;
 	}
 	return false;
 }
@@ -1640,7 +1688,7 @@ bool Integer::isNEGONE() {
 
 bool Integer::isEven() {
 	if (value.size() > 0) {
-		if ((value[0] % 2) == 0) {
+		if ((value[value.size() - 1] % 2) == 0) {
 			return true;
 		}
 	}
@@ -1649,14 +1697,14 @@ bool Integer::isEven() {
 
 
 void Integer::multOnTen() {
-	this->value.add(0);
+	if (!isZero()) this->value.add(0);
 }
 void Integer::divideOnTen() {
-	this->value.removeBack();
+	if (value.size() > 1) this->value.removeBack();
 }
 std::string Integer::toString() {
 	if (this->isNAN) return "NAN";
-	if (value.size() < 1) {
+	if (isZero()) {
 		return "0";
 	}
 	if (value.size() == 1) {
@@ -1684,7 +1732,8 @@ Integer* Integer::mod(Integer* a) {
 }
 
 Integer* Integer::pow(Integer& a) {
-	if (a.isZERO()) {
+	if (isZero()) return ZERO;
+	if (a.isZero()) {
 		return new Integer(1);
 	}
 	else if (a.isONE()) {
@@ -1710,6 +1759,8 @@ Integer* Integer::pow(Integer& a) {
 		return ret;
 	}
 	else {
+		//for the future
+		//return Float(this).pow(Float(a));
 		return 0;
 	}
 }

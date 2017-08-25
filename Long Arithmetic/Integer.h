@@ -49,7 +49,7 @@ public:
 	Integer(const std::string str);
 	Integer(const Integer& a);
 	Integer(const Integer* a);
-	inline Integer(const Float& a);
+	Integer(const Float& a);
 
 	inline ~Integer();
 
@@ -264,7 +264,8 @@ public:
 	bool isLongLong();
 	bool isUnsignedLongLong();
 
-	bool isZERO();
+	bool isZero();
+	bool isZero()const;
 	bool isONE();
 	bool isNEGONE();
 	bool isEven();
