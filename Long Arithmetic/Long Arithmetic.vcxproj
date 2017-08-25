@@ -113,7 +113,6 @@
   <ItemGroup>
     <ClInclude Include="Float.h" />
     <ClInclude Include="Integer.h" />
-    <ClInclude Include="Mass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Float.cpp" />
